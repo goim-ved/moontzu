@@ -14,7 +14,7 @@ export default async function LoginPage(props: {
     <div className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">CloudBooking</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">MoonTzu</CardTitle>
           <CardDescription className="text-center">
             Sign in to your account or create a new one to manage your bookings.
           </CardDescription>

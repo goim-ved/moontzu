@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { updateSession } from "@/utils/supabase/middleware"
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // 1. Update Supabase session (refreshes if expired)
   const response = await updateSession(request)
 
@@ -12,12 +12,15 @@ export async function middleware(request: NextRequest) {
   // Define your root domain (e.g., localhost:3000 or yoursaas.com)
   const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3000"
 
-  // Extract subdomain
-  const subdomain = hostname?.replace(`.${rootDomain}`, "")
+  // Extract subdomain if hostname is not the root domain exactly
+  let subdomain = null
+  if (hostname && hostname !== rootDomain) {
+    subdomain = hostname.replace(`.${rootDomain}`, "")
+  }
 
-  // If we have a subdomain and it's not 'www' or the root domain itself
-  if (subdomain && subdomain !== rootDomain && subdomain !== "www") {
-    // Rewrite the request to the dynamic domain route
+  // If we have a valid subdomain (not root, not www)
+  if (subdomain && subdomain !== "www") {
+    // Rewrite to the dynamic domain route
     return NextResponse.rewrite(new URL(`/${subdomain}${url.pathname}`, request.url))
   }
 

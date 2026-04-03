@@ -13,8 +13,23 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CloudBooking | Multi-Tenant Scheduling Platform",
+  title: "MoonTzu | Multi-Tenant Scheduling Platform",
   description: "Enterprise-grade white-labeled booking system with subdomain routing, Stripe Connect integration, and robust data isolation.",
+  keywords: ["SaaS", "Booking", "Scheduling", "Multi-Tenant", "Stripe Connect", "Next.js"],
+  authors: [{ name: "MoonTzu Team" }],
+  openGraph: {
+    title: "MoonTzu | Multi-Tenant Scheduling Platform",
+    description: "The ultimate white-labeled booking engine for modern businesses.",
+    type: "website",
+    locale: "en_US",
+    url: "https://moontzu.example.com",
+    siteName: "MoonTzu",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MoonTzu | Multi-Tenant Scheduling Platform",
+    description: "Enterprise-grade booking engine with robust data isolation.",
+  },
 };
 
 export default function RootLayout({
