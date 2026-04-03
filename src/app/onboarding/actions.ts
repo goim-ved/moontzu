@@ -19,7 +19,7 @@ export async function createTenant(formData: FormData) {
   // 2. Insert into public.tenants
   const { data: tenant, error: tenantError } = await supabase
     .from("tenants")
-    .insert([{ name, slug }])
+    .insert([{ name, slug, created_by: user.id }])
     .select()
     .single()
 

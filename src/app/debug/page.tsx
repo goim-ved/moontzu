@@ -1,14 +1,18 @@
 import { createClient } from "@/utils/supabase/server";
+import { headers } from "next/headers";
 
 export default async function DebugPage() {
   const supabase = await createClient();
+  const headerList = await headers();
+  const host = headerList.get("host");
+  const forwardedHost = headerList.get("x-forwarded-host");
   
   const hasUrl = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
   const hasKey = !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "Not set (using default: localhost:3000)";
 
   // Attempt to select 1 row from tenants (to check RLS and connectivity)
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("tenants")
     .select("count", { count: "exact", head: true });
 
@@ -21,25 +25,26 @@ export default async function DebugPage() {
           MoonTzu Diagnostics
         </h1>
         
-        <div className="space-y-6 text-sm">
-          <div className="flex justify-between items-center border-b border-zinc-800 pb-2">
-            <span className="text-zinc-500">NEXT_PUBLIC_SUPABASE_URL</span>
-            <span className={hasUrl ? "text-emerald-400" : "text-red-400"}>
-              {hasUrl ? "Defined" : "MISSING"}
-            </span>
+        <div className="space-y-4 text-sm">
+          <div className="grid grid-cols-2 gap-4 border-b border-zinc-800 pb-2">
+            <span className="text-zinc-500">Host Header</span>
+            <span className="text-white truncate">{host || "Missing"}</span>
           </div>
           
-          <div className="flex justify-between items-center border-b border-zinc-800 pb-2">
-            <span className="text-zinc-500">NEXT_PUBLIC_SUPABASE_ANON_KEY</span>
-            <span className={hasKey ? "text-emerald-400" : "text-red-400"}>
-              {hasKey ? "Defined" : "MISSING"}
-            </span>
+          <div className="grid grid-cols-2 gap-4 border-b border-zinc-800 pb-2">
+            <span className="text-zinc-500">Forwarded Host</span>
+            <span className="text-white truncate">{forwardedHost || "None"}</span>
           </div>
-          
-          <div className="flex justify-between items-center border-b border-zinc-800 pb-2">
-            <span className="text-zinc-500">ROOT_DOMAIN</span>
-            <span className="text-blue-400">
-              {rootDomain}
+
+          <div className="grid grid-cols-2 gap-4 border-b border-zinc-800 pb-2">
+            <span className="text-zinc-500">ROOT_DOMAIN Env</span>
+            <span className="text-blue-400 truncate">{rootDomain}</span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 border-b border-zinc-800 pb-2">
+            <span className="text-zinc-500">Supabase Config</span>
+            <span className={hasUrl && hasKey ? "text-emerald-400" : "text-red-400"}>
+              {hasUrl && hasKey ? "Fully Loaded" : "Partial/Missing"}
             </span>
           </div>
 
@@ -48,16 +53,19 @@ export default async function DebugPage() {
             <p className={`text-lg font-bold ${error ? "text-red-400" : "text-emerald-400"}`}>
               {status}
             </p>
-            {!error && (
-              <p className="text-[10px] text-zinc-600 mt-2 italic">
-                Successfully authorized through Supabase Auth (SSR) and verified with RLS.
-              </p>
-            )}
+          </div>
+
+          <div className="mt-4 p-4 bg-blue-950/20 rounded-lg border border-blue-900/30">
+            <p className="text-xs text-blue-400 uppercase tracking-widest mb-2 font-bold">Local Dev Tip</p>
+            <p className="text-xs text-zinc-300">
+              If subdomains (<code>lvh.me</code>) are failing, try appending:<br/>
+              <code className="text-white">?_dev_subdomain=yourname</code> to any URL.
+            </p>
           </div>
         </div>
       </div>
       <p className="mt-6 text-zinc-600 text-[10px]">
-        This is a diagnostic tool. Delete <code>src/app/debug/page.tsx</code> before production.
+        Diagnostic tool active. Delete <code>src/app/debug/page.tsx</code> before production.
       </p>
     </div>
   );

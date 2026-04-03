@@ -13,6 +13,7 @@ export default async function TenantPage({
   const supabase = await createClient()
 
   // 1. Fetch Tenant and Services
+  console.log(`[Portal] Fetching tenant for slug: ${domain}`)
   const { data: tenant, error: tenantError } = await supabase
     .from("tenants")
     .select("*")
@@ -20,6 +21,7 @@ export default async function TenantPage({
     .single()
 
   if (tenantError || !tenant) {
+    console.error(`[Portal] Tenant error/not found for ${domain}:`, tenantError)
     return notFound()
   }
 
