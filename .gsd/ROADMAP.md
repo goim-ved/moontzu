@@ -1,14 +1,14 @@
 # ROADMAP.md
 
-> **Current Phase**: Not started
-> **Milestone**: v1.0
+> **Current Phase**: ✅ Complete
+> **Milestone**: v1.0 (delivered)
 
 ## Must-Haves (from SPEC)
-- [ ] Multi-tenant isolation using Postgres RLS.
-- [ ] Subdomain routing on Vercel via Middleware.
-- [ ] RBAC for Tenant Owners and Staff.
-- [ ] Stripe Connect integration for payments.
-- [ ] Core Booking Engine (Staff + Service).
+- [x] Multi-tenant isolation using Postgres RLS.
+- [x] Subdomain routing on Vercel via Middleware.
+- [x] RBAC for Tenant Owners and Staff.
+- [x] Stripe Connect integration for payments.
+- [x] Core Booking Engine (Staff + Service).
 
 ## Phases
 
@@ -33,5 +33,5 @@
 **Requirements**: REQ-06
 
 ### Phase 5: Polish & Launch
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Objective**: Finalize UI details, run overarching E2E testing, ensure Vercel deployment stability, and write the final documentation.

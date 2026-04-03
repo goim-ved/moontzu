@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CloudBooking | Multi-Tenant SaaS MVP 🚀
 
-## Getting Started
+A robust, enterprise-ready multi-tenant scheduling and resource-booking platform built with **Next.js 15+**, **Supabase**, and **Stripe Connect**.
 
-First, run the development server:
+## 🏗️ Architecture Highlights
 
+### 1. Multi-Tenancy (Data Isolation)
+- **Strategy**: Shared Database Schema with **PostgreSQL Row-Level Security (RLS)**.
+- **Security**: Every query is filtered by `tenant_id` at the database level using a custom `get_user_tenants()` function, ensuring peak security and absolute data privacy between clients.
+
+### 2. Dynamic White-Labeling (Subdomain Routing)
+- **Routing**: Next.js Middleware intercepts requests to extract subdomains (e.g., `acme.localhost:3000`).
+- **Branding**: Requests are dynamically rewritten to `/[domain]` routes, fetching tenant-specific colors, names, and services based on the URL context.
+
+### 3. Monetization (Stripe Connect)
+- **Multi-party Payouts**: Integrated **Stripe Connect** to allow tenant owners to onboard their own Stripe accounts.
+- **Destination Charges**: Platform fee of 10% is automatically deducted, with the remaining balance routed directly to the merchant's connected account.
+- **Secure Checkout**: Dynamic Stripe Checkout sessions generated per booking.
+
+## 🛠️ Technology Stack
+
+- **Framework**: Next.js 15+ (App Router, Turbopack)
+- **Database/Auth**: Supabase (PostgreSQL, SSR Auth, RLS)
+- **Styling**: Tailwind CSS v4, Shadcn UI
+- **Payments**: Stripe SDK (Connect, Checkout)
+- **Deployment**: Vercel ready (Middleware rewriting, Server Actions)
+
+## 🚀 Key Features
+
+- ✅ **Secure Onboarding**: Automated tenant creation and owner assignment.
+- ✅ **RBAC Dashboard**: Role-based access for staff to manage their services and schedules.
+- ✅ **Core Booking Engine**: Flexible service definitions, availability logic, and appointment lifecycle.
+- ✅ **Client-Facing Portals**: Performance-optimized, SEO-ready landing pages with seamless booking flows.
+
+## ⚙️ Setup & Local Development
+
+### 1. Initialize Supabase
+Ensure you have the Supabase CLI installed. Run migrations to setup the schema and RLS:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+supabase migration up
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Environment Variables
+Create a `.env.local` file with the following keys:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+STRIPE_SECRET_KEY=your_stripe_secret_key
+NEXT_PUBLIC_ROOT_DOMAIN=localhost:3000
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Install & Run
+```bash
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+*Built as a Showcase Project for Advanced SaaS Architecture.*
