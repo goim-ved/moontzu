@@ -17,52 +17,55 @@ export default async function OnboardingPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 bg-muted/50">
-      <Card className="w-full max-w-lg shadow-2xl">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl font-extrabold tracking-tight">Create your business</CardTitle>
-          <CardDescription>
-            Enter your business details to setup your branded booking subdomain.
-          </CardDescription>
-        </CardHeader>
-        <form action={createTenant}>
-          <CardContent className="space-y-6">
-            <Field>
-              <Label htmlFor="name">Business Name</Label>
-              <Input
-                id="name"
-                name="name"
-                placeholder="Acme Clinic"
-                required
-                className="text-lg py-6"
-              />
-            </Field>
-            <Field>
-              <Label htmlFor="slug">Desired Subdomain</Label>
-              <div className="flex items-center gap-2">
+    <div className="flex min-h-screen flex-col items-center justify-center p-6 bg-background">
+      <div className="w-full max-w-lg space-y-8">
+        <div className="space-y-2 text-center">
+          <h1 className="text-4xl font-bold tracking-tight">Create your domain</h1>
+          <p className="text-zinc-400">
+            Configure your white-labeled booking portal
+          </p>
+        </div>
+        
+        <Card className="border-zinc-900 bg-zinc-950/50 shadow-2xl rounded-2xl">
+          <form action={createTenant}>
+            <CardContent className="space-y-8 pt-8">
+              <Field className="space-y-3">
+                <Label htmlFor="name" className="text-zinc-300 font-medium">Business Name</Label>
                 <Input
-                  id="slug"
-                  name="slug"
-                  placeholder="acme"
+                  id="name"
+                  name="name"
+                  placeholder="Acme Aesthetics"
                   required
-                  className="text-lg py-6"
+                  className="bg-zinc-950 border-zinc-800 h-14 text-lg px-4 rounded-xl focus-visible:ring-1 focus-visible:ring-zinc-500"
                 />
-                <span className="text-muted-foreground font-medium text-lg">
-                  .{process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3000"}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground mt-1.5 px-1">
-                Letters, numbers, and hyphens only. This will be your public URL.
-              </p>
-            </Field>
-          </CardContent>
-          <CardFooter>
-            <Button type="submit" className="w-full py-6 text-lg font-bold">
-              Construct My Platform
-            </Button>
-          </CardFooter>
-        </form>
-      </Card>
+              </Field>
+              <Field className="space-y-3">
+                <Label htmlFor="slug" className="text-zinc-300 font-medium">Desired Subdomain</Label>
+                <div className="flex items-center gap-3">
+                  <Input
+                    id="slug"
+                    name="slug"
+                    placeholder="acme"
+                    required
+                    className="bg-zinc-950 border-zinc-800 h-14 text-lg px-4 rounded-xl focus-visible:ring-1 focus-visible:ring-zinc-500 font-mono"
+                  />
+                  <span className="text-zinc-500 font-medium text-lg">
+                    .{process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3000"}
+                  </span>
+                </div>
+                <p className="text-xs text-zinc-500 mt-2">
+                  Letters, numbers, and hyphens only.
+                </p>
+              </Field>
+            </CardContent>
+            <CardFooter className="border-t border-zinc-900/50 pt-6 pb-8">
+              <Button type="submit" className="w-full h-14 rounded-xl text-lg font-semibold bg-white text-black hover:bg-zinc-200">
+                Initialize Instance
+              </Button>
+            </CardFooter>
+          </form>
+        </Card>
+      </div>
     </div>
   )
 }

@@ -2,11 +2,32 @@ import { type NextRequest, NextResponse } from "next/server"
 import { updateSession } from "@/utils/supabase/middleware"
 
 export async function proxy(request: NextRequest) {
-  // 1. Update Supabase session (refreshes if expired)
-  const response = await updateSession(request)
-
-  // 2. Handle Subdomain Routing
+  // 1. Initialize Supabase Client & Update Session
+  const { supabase, response } = await updateSession(request)
   const url = request.nextUrl.clone()
+
+  // 2. Protect /admin routes
+  if (url.pathname.startsWith("/admin")) {
+    if (!supabase) return response
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.redirect(new URL("/login", request.url))
+    }
+    
+    // Check if user is a platform admin
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("is_platform_admin")
+      .eq("id", user.id)
+      .single()
+
+    // Strict admin check (currently fallback allowed for user's existing account)
+    if (profile && !profile.is_platform_admin) {
+      // return NextResponse.redirect(new URL("/", request.url))
+    }
+  }
+
+  // 3. Handle Subdomain Routing
   const hostname = request.headers.get("host")
 
   // Define your root domain (e.g., localhost:3000 or yoursaas.com)

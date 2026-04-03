@@ -42,7 +42,29 @@ export async function createAppointment(domain: string, serviceId: string, formD
     throw new Error("This business is not currently accepting payments.")
   }
 
-  // 4. Create a Stripe Checkout Session
+  // 4. Create appointment FIRST to get its ID (Pending status)
+  const start = new Date(startTime)
+  const end = new Date(start.getTime() + service.duration_minutes * 60000)
+
+  const { data: appointment, error: appointmentError } = await supabase
+    .from("appointments")
+    .insert([{
+      tenant_id: tenant.id,
+      service_id: serviceId,
+      customer_name: customerName,
+      customer_email: customerEmail,
+      start_time: start.toISOString(),
+      end_time: end.toISOString(),
+      status: "pending"
+    }])
+    .select("id")
+    .single()
+
+  if (appointmentError || !appointment) {
+    throw new Error("Failed to create pending appointment.")
+  }
+
+  // 5. Create a Stripe Checkout Session
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: [
@@ -70,27 +92,9 @@ export async function createAppointment(domain: string, serviceId: string, formD
     metadata: {
       tenant_id: tenant.id,
       service_id: serviceId,
-      customer_name: customerName,
-      customer_email: customerEmail,
-      start_time: startTime,
+      appointment_id: appointment.id,
     },
   })
-
-  // 5. Create appointment (Pending status)
-  const start = new Date(startTime)
-  const end = new Date(start.getTime() + service.duration_minutes * 60000)
-
-  await supabase
-    .from("appointments")
-    .insert([{
-      tenant_id: tenant.id,
-      service_id: serviceId,
-      customer_name: customerName,
-      customer_email: customerEmail,
-      start_time: start.toISOString(),
-      end_time: end.toISOString(),
-      status: "pending"
-    }])
 
   if (session.url) {
     redirect(session.url)

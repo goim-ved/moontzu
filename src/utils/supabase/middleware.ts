@@ -15,7 +15,7 @@ export async function updateSession(request: NextRequest) {
     // If Supabase keys are missing, don't crash the entire app.
     // Return the response as is and let the page handle the missing data later.
     console.warn("Supabase environment variables are missing. Checkout your Vercel Dashboard.");
-    return response;
+    return { supabase: null, response };
   }
 
   const supabase = createServerClient(
@@ -46,5 +46,5 @@ export async function updateSession(request: NextRequest) {
   // This will refresh the session if it's expired
   await supabase.auth.getUser()
 
-  return response
+  return { supabase, response }
 }
