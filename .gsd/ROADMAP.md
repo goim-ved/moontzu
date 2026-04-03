@@ -23,7 +23,7 @@
 **Requirements**: REQ-03
 
 ### Phase 3: Core Booking Engine & RBAC
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Objective**: Build the staff management (RBAC), service definition, availability logic, and the customer booking workflow.
 **Requirements**: REQ-04, REQ-05
 
