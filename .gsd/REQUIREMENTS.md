@@ -8,4 +8,4 @@
 | REQ-03 | Implement dynamic subdomain routing pointing to tenant branded pages | SPEC goal 1 & Constraints | Complete |
 | REQ-04 | Create a booking engine supporting appointments with staff and services | SPEC goal 4 | Complete |
 | REQ-05 | Allow staff to manage availability and view schedules | SPEC Users | Complete |
-| REQ-06 | Implement Stripe Connect standard/express routing for payments | SPEC goal 3 | Pending |
+| REQ-06 | Implement Stripe Connect standard/express routing for payments | SPEC goal 3 | Complete |
