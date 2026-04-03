@@ -47,7 +47,9 @@ export default async function OnboardingPage() {
                   required
                   className="text-lg py-6"
                 />
-                <span className="text-muted-foreground font-medium text-lg">.localhost:3000</span>
+                <span className="text-muted-foreground font-medium text-lg">
+                  .{process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3000"}
+                </span>
               </div>
               <p className="text-xs text-muted-foreground mt-1.5 px-1">
                 Letters, numbers, and hyphens only. This will be your public URL.
