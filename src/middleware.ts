@@ -1,8 +1,27 @@
-import { type NextRequest } from "next/server"
+import { type NextRequest, NextResponse } from "next/server"
 import { updateSession } from "@/utils/supabase/middleware"
 
 export async function middleware(request: NextRequest) {
-  return await updateSession(request)
+  // 1. Update Supabase session (refreshes if expired)
+  const response = await updateSession(request)
+
+  // 2. Handle Subdomain Routing
+  const url = request.nextUrl.clone()
+  const hostname = request.headers.get("host")
+
+  // Define your root domain (e.g., localhost:3000 or yoursaas.com)
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3000"
+
+  // Extract subdomain
+  const subdomain = hostname?.replace(`.${rootDomain}`, "")
+
+  // If we have a subdomain and it's not 'www' or the root domain itself
+  if (subdomain && subdomain !== rootDomain && subdomain !== "www") {
+    // Rewrite the request to the dynamic domain route
+    return NextResponse.rewrite(new URL(`/${subdomain}${url.pathname}`, request.url))
+  }
+
+  return response
 }
 
 export const config = {
