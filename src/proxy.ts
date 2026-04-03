@@ -14,14 +14,19 @@ export async function proxy(request: NextRequest) {
 
   // Extract subdomain if hostname is not the root domain exactly
   let subdomain = null
-  if (hostname && hostname !== rootDomain) {
+  if (hostname && hostname !== rootDomain && hostname.endsWith(`.${rootDomain}`)) {
     subdomain = hostname.replace(`.${rootDomain}`, "")
   }
 
   // If we have a valid subdomain (not root, not www)
   if (subdomain && subdomain !== "www") {
     // Rewrite to the dynamic domain route
-    return NextResponse.rewrite(new URL(`/${subdomain}${url.pathname}`, request.url))
+    try {
+      return NextResponse.rewrite(new URL(`/${subdomain}${url.pathname}`, request.url))
+    } catch (e) {
+      console.error("Rewrite failed:", e)
+      return response
+    }
   }
 
   return response
