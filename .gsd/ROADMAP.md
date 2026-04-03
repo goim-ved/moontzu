@@ -13,7 +13,7 @@
 ## Phases
 
 ### Phase 1: Foundation & Auth
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Objective**: Setup Next.js, database schema (Supabase/Postgres), RLS multi-tenancy, and overarching Auth (including SSO).
 **Requirements**: REQ-01, REQ-02
 
